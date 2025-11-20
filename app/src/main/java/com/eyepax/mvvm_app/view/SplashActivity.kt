@@ -18,7 +18,7 @@ class SplashActivity : AppCompatActivity() {
 
         splashViewModel.isFinished.observe(this) { finished ->
             if (finished) {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, SignInActivity::class.java))
                 finish()
             }
         }
