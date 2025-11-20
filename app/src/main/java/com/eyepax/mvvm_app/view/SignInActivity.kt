@@ -40,10 +40,10 @@ class SignInActivity : AppCompatActivity() {
         viewModel.loginResult.observe(this) { (success, message) ->
             tvStatus.text = message
             if (success) {
-                // Navigate to MainActivity after successful login
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()  // So user can't go back to Sign In by back button
             }
         }
+
     }
 }
