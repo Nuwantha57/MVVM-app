@@ -33,6 +33,18 @@
         android:text="Sign In"
         android:layout_marginTop="24dp" />
 
+    <!-- Sign Up Button -->
+    <TextView
+        android:id="@+id/tvGoToSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Don't have an account? Sign Up"
+        android:textColor="@color/purple_500"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+
     <!-- Status Text (for showing result) -->
     <TextView
         android:id="@+id/tvStatus"

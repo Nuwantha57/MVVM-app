@@ -9,39 +9,36 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.eyepax.mvvm_app.R
-import com.eyepax.mvvm_app.viewmodel.SignInViewModel
+import com.eyepax.mvvm_app.viewmodel.SignUpViewModel
 
-class SignInActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
-    private val viewModel: SignInViewModel by viewModels()
+    private val viewModel: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_sign_in)
+        setContentView(R.layout.activity_sign_up)
 
         val etUsername = findViewById<EditText>(R.id.etUsername)
+        val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
-        val btnLogin = findViewById<Button>(R.id.btnLogin)
+        val btnSignUp = findViewById<Button>(R.id.btnSignUp)
         val tvStatus = findViewById<TextView>(R.id.tvStatus)
 
-        //navigate to the sign up screen
-        val tvGoToSignUp = findViewById<TextView>(R.id.tvGoToSignUp)
-        tvGoToSignUp.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
-        }
-
-        btnLogin.setOnClickListener {
+        btnSignUp.setOnClickListener {
             val username = etUsername.text.toString()
+            val email = etEmail.text.toString()
             val password = etPassword.text.toString()
-            viewModel.login(username, password)
+
+            viewModel.register(username, email, password)
         }
 
-        viewModel.loginResult.observe(this) { (success, message) ->
+        viewModel.signUpResult.observe(this) { message ->
             tvStatus.text = message
-            if (success) {
-                // Navigate to MainActivity after successful login
-                startActivity(Intent(this, MainActivity::class.java))
+            if (message == "Registration successful! Please proceed to Sign In.") {
+                // Redirect to SignIn screen
+                startActivity(Intent(this, SignInActivity::class.java))
                 finish()
             }
         }
