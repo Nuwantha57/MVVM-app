@@ -2,56 +2,54 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:padding="24dp"
-    android:gravity="center">
+    android:padding="24dp">
 
-    <!-- Username Field -->
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username"
-        android:inputType="textPersonName" />
+        android:inputType="text"/>
 
-    <!-- Password Field -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:layout_marginTop="12dp"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:layout_marginTop="12dp"/>
 
-    <!-- Sign In Button -->
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign In"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"/>
 
-    <!-- Sign Up Button -->
-    <TextView
-        android:id="@+id/tvGoToSignUp"
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don't have an account? Sign Up"
-        android:textColor="@color/purple_500"
         android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:focusable="true" />
+        android:visibility="gone"/>
 
-
-    <!-- Status Text (for showing result) -->
     <TextView
         android:id="@+id/tvStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
-        android:textColor="#8fce00"
+        android:textColor="#FF0000"
         android:gravity="center"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/tvGoToSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Don't have an account? Sign Up"
+        android:textColor="#6200EE"
+        android:layout_marginTop="16dp"/>
 </LinearLayout>
