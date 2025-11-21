@@ -32,6 +32,39 @@ data class LoginResponse(
     val expiresIn: Int? = null
 )
 
+// Sign Up Request
+data class SignUpRequest(
+    @SerializedName("username")
+    val username: String,
+
+    @SerializedName("password")
+    val password: String,
+
+    @SerializedName("email")
+    val email: String,
+
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("phoneNumber")
+    val phoneNumber: String,
+)
+
+// Sign Up Response
+data class SignUpResponse(
+    @SerializedName("success")
+    val success: Boolean,
+
+    @SerializedName("message")
+    val message: String,
+
+    @SerializedName("userId")
+    val userId: String? = null,
+
+    @SerializedName("userConfirmed")
+    val userConfirmed: Boolean? = false
+)
+
 // Generic Error Response
 data class ErrorResponse(
     @SerializedName("success")
