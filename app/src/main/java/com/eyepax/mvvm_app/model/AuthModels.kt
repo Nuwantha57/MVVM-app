@@ -73,3 +73,27 @@ data class ErrorResponse(
     @SerializedName("message")
     val message: String
 )
+
+// Verification Request (NEW)
+data class VerifyEmailRequest(
+    @SerializedName("username")
+    val username: String,
+
+    @SerializedName("code")
+    val code: String
+)
+
+// Verification Response (NEW)
+data class VerifyEmailResponse(
+    @SerializedName("success")
+    val success: Boolean,
+
+    @SerializedName("message")
+    val message: String
+)
+
+// Resend Code Request (NEW)
+data class ResendCodeRequest(
+    @SerializedName("username")
+    val username: String
+)

@@ -79,4 +79,45 @@ class AuthRepository {
             }
         }
     }
+
+    suspend fun verifyEmail(username: String, code: String): Resource<VerifyEmailResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.d(TAG, "Verifying email for username: $username")
+
+                val request = VerifyEmailRequest(username, code)
+                val response: Response<VerifyEmailResponse> = apiService.verifyEmail(request)
+
+                if (response.isSuccessful && response.body() != null) {
+                    val body = response.body()!!
+                    Log.d(TAG, "Verification successful: ${body.message}")
+                    Resource.Success(body)
+                } else {
+                    Resource.Error("Verification failed: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception during verification", e)
+                Resource.Error(e.message ?: "An error occurred")
+            }
+        }
+    }
+
+    suspend fun resendCode(username: String): Resource<VerifyEmailResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.d(TAG, "Resending code for username: $username")
+
+                val request = ResendCodeRequest(username)
+                val response: Response<VerifyEmailResponse> = apiService.resendCode(request)
+
+                if (response.isSuccessful && response.body() != null) {
+                    Resource.Success(response.body()!!)
+                } else {
+                    Resource.Error("Failed to resend code")
+                }
+            } catch (e: Exception) {
+                Resource.Error(e.message ?: "An error occurred")
+            }
+        }
+    }
 }

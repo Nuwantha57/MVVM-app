@@ -55,14 +55,26 @@ class SignUpActivity : AppCompatActivity() {
         // Observe sign up result
         viewModel.signUpResult.observe(this) { (success, message) ->
             tvStatus.text = message
-            tvStatus.setTextColor(if (success) 0xFF00FF00.toInt() else 0xFFFF0000.toInt())
+            tvStatus.visibility = View.VISIBLE
 
             if (success) {
-                // Navigate to Sign In after successful registration
+                tvStatus.setTextColor(getColor(android.R.color.holo_green_dark))
+
+                // Get username BEFORE navigating
+                val username = etUsername.text.toString().trim()
+
+                // Log for debugging
+                android.util.Log.d("SignUpActivity", "Sign up successful, navigating to verification for user: $username")
+
+                // Navigate to verification screen after 1 second
                 android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                    startActivity(Intent(this, SignInActivity::class.java))
+                    val intent = Intent(this@SignUpActivity, VerifyEmailActivity::class.java)
+                    intent.putExtra("username", username)
+                    startActivity(intent)
                     finish()
-                }, 2000)
+                }, 1000)
+            } else {
+                tvStatus.setTextColor(getColor(android.R.color.holo_red_dark))
             }
         }
 
@@ -87,6 +99,9 @@ class SignUpActivity : AppCompatActivity() {
             val phoneNumber = etPhoneNumber.text.toString().trim()
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
+
+            // Log for debugging
+            android.util.Log.d("SignUpActivity", "Sign up button clicked for user: $username")
 
             viewModel.signUp(
                 username = username,
