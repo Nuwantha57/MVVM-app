@@ -1,0 +1,3 @@
+[submodule "flutter_module"]
+	path = flutter_module
+	url = https://github.com/Nuwantha57/task-01-mobile

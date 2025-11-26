@@ -16,32 +16,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MVVM_app">
+
         <activity
             android:name=".view.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".view.MainActivity"
-            android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
-
+            android:exported="false" />
 
         <activity android:name=".view.SignInActivity" />
         <activity android:name=".view.SignUpActivity" />
         <activity android:name=".view.VerifyEmailActivity" />
         <activity android:name=".view.HomeActivity" />
 
-
+        <!-- ADD FLUTTER HOME ACTIVITY -->
+        <activity
+            android:name=".view.FlutterHomeActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
 
     </application>
 
