@@ -69,6 +69,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // JWT Decoding
+    implementation("com.auth0.android:jwtdecode:2.0.2")
+
     implementation(project(":flutter"))
 }
 

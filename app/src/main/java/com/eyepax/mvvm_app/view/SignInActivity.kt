@@ -31,13 +31,8 @@ class SignInActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_sign_in)
 
-        // Initialize views
         initViews()
-
-        // Set up observers
         setupObservers()
-
-        // Set up click listeners
         setupClickListeners()
     }
 
@@ -78,23 +73,24 @@ class SignInActivity : AppCompatActivity() {
             }
         }
 
-        // Observe user credentials and navigate to Flutter
-        viewModel.userCredentials.observe(this) { (username, loginResponse) ->
-            // Navigate to Flutter Home Screen with user data
+        // Observe complete user data and navigate to Flutter
+        viewModel.completeUserData.observe(this) { userData ->
+            // Navigate to Flutter Home Screen with decoded user info
             val intent = FlutterHomeActivity.createIntent(
                 context = this,
-                username = username,
-                accessToken = loginResponse.accessToken ?: "",
-                idToken = loginResponse.idToken,
-                refreshToken = loginResponse.refreshToken
+                userId = userData.userInfo.userId,
+                name = userData.userInfo.name,
+                email = userData.userInfo.email,
+                accessToken = userData.accessToken,
+                idToken = userData.idToken,
+                refreshToken = userData.refreshToken
             )
             startActivity(intent)
-            finish() // Close login activity
+            finish()
         }
     }
 
     private fun setupClickListeners() {
-        // Login button click
         btnLogin.setOnClickListener {
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
@@ -102,7 +98,6 @@ class SignInActivity : AppCompatActivity() {
             viewModel.login(username, password)
         }
 
-        // Navigate to Sign Up
         tvGoToSignUp.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }

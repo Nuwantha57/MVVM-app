@@ -17,15 +17,17 @@ class FlutterHomeActivity : FlutterActivity() {
 
         fun createIntent(
             context: Context,
-            username: String,
+            userId: String,
+            name: String,
+            email: String,
             accessToken: String,
             idToken: String? = null,
             refreshToken: String? = null
         ): Intent {
             val userDataMap = hashMapOf<String, Any>(
-                "userId" to username,
-                "name" to username, // You can update this if you have user's name
-                "email" to username, // Assuming username is email
+                "userId" to userId,
+                "name" to name,
+                "email" to email,
                 "accessToken" to accessToken
             )
 
