@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.eyepax.mvvm_app.R
 import com.eyepax.mvvm_app.util.Resource
+import com.eyepax.mvvm_app.util.SessionManager
 import com.eyepax.mvvm_app.viewmodel.SignInViewModel
 
 class SignInActivity : AppCompatActivity() {
@@ -75,9 +76,21 @@ class SignInActivity : AppCompatActivity() {
             }
         }
 
-        // Observe complete user data and navigate to Flutter
+
         viewModel.completeUserData.observe(this) { userData ->
-            // Navigate to Flutter Home Screen with decoded user info
+
+            // SAVE SESSION BEFORE NAVIGATING
+            val sessionManager = SessionManager(this)
+            sessionManager.saveUserSession(
+                accessToken = userData.accessToken,
+                refreshToken = userData.refreshToken,
+                idToken = userData.idToken,
+                userId = userData.userInfo.userId,
+                email = userData.userInfo.email,
+                name = userData.userInfo.name
+            )
+
+            // Now navigate to Flutter
             val intent = FlutterHomeActivity.createIntent(
                 context = this,
                 userId = userData.userInfo.userId,
@@ -90,6 +103,7 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
     }
 
     private fun setupClickListeners() {
