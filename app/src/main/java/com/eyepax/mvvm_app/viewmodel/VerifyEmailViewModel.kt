@@ -43,12 +43,15 @@ class VerifyEmailViewModel : ViewModel() {
                         if (response != null && response.success) {
                             _verifyResult.value = Pair(true, response.message)
                         } else {
-                            _verifyResult.value = Pair(false, response?.message ?: "Verification failed")
+                            _verifyResult.value =
+                                Pair(false, response?.message ?: "Verification failed")
                         }
                     }
+
                     is Resource.Error -> {
                         _verifyResult.value = Pair(false, result.message ?: "Verification failed")
                     }
+
                     is Resource.Loading -> {}
                 }
             } catch (e: Exception) {
@@ -71,9 +74,11 @@ class VerifyEmailViewModel : ViewModel() {
                     is Resource.Success -> {
                         _verifyResult.value = Pair(true, "Code resent successfully")
                     }
+
                     is Resource.Error -> {
                         _verifyResult.value = Pair(false, result.message ?: "Failed to resend code")
                     }
+
                     is Resource.Loading -> {}
                 }
             } finally {

@@ -7,10 +7,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.eyepax.mvvm_app.R
+import com.eyepax.mvvm_app.util.Resource
 import com.eyepax.mvvm_app.viewmodel.SignInViewModel
 
 class SignInActivity : AppCompatActivity() {
@@ -29,13 +31,8 @@ class SignInActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_sign_in)
 
-        // Initialize views
         initViews()
-
-        // Set up observers
         setupObservers()
-
-        // Set up click listeners
         setupClickListeners()
     }
 
@@ -50,13 +47,20 @@ class SignInActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         // Observe login result
-        viewModel.loginResult.observe(this) { (success, message) ->
-            tvStatus.text = message
+        viewModel.loginResult.observe(this) { result ->
+            when (result) {
+                is Resource.Success -> {
+                    tvStatus.text = result.data?.message ?: "Login successful"
+                }
 
-            if (success) {
-                // Navigate to Home on success
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
+                is Resource.Error -> {
+                    tvStatus.text = result.message
+                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is Resource.Loading -> {
+                    tvStatus.text = "Logging in..."
+                }
             }
         }
 
@@ -71,17 +75,24 @@ class SignInActivity : AppCompatActivity() {
             }
         }
 
-        // Observe access token (optional - for debugging)
-        viewModel.accessToken.observe(this) { token ->
-            token?.let {
-                // Token received - you can save it to SharedPreferences here
-                android.util.Log.d("SignInActivity", "Access Token: $it")
-            }
+        // Observe complete user data and navigate to Flutter
+        viewModel.completeUserData.observe(this) { userData ->
+            // Navigate to Flutter Home Screen with decoded user info
+            val intent = FlutterHomeActivity.createIntent(
+                context = this,
+                userId = userData.userInfo.userId,
+                name = userData.userInfo.name,
+                email = userData.userInfo.email,
+                accessToken = userData.accessToken,
+                idToken = userData.idToken,
+                refreshToken = userData.refreshToken
+            )
+            startActivity(intent)
+            finish()
         }
     }
 
     private fun setupClickListeners() {
-        // Login button click
         btnLogin.setOnClickListener {
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
@@ -89,7 +100,6 @@ class SignInActivity : AppCompatActivity() {
             viewModel.login(username, password)
         }
 
-        // Navigate to Sign Up
         tvGoToSignUp.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }

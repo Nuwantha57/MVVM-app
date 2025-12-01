@@ -12,13 +12,16 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://storage.googleapis.com/download.flutter.io") }
     }
 }
 
 rootProject.name = "MVVM_app"
 include(":app")
- 
+
+// Include Flutter module via Groovy file
+apply(from = "flutter_settings.gradle")
