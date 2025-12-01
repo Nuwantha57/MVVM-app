@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -71,6 +72,17 @@ dependencies {
 
     // JWT Decoding
     implementation("com.auth0.android:jwtdecode:2.0.2")
+
+    // Room Database
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
+    // RecyclerView
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    // CardView (for list items)
+    implementation("androidx.cardview:cardview:1.0.0")
 
     implementation(project(":flutter"))
 }
