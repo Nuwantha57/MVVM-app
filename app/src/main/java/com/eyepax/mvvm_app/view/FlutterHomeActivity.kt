@@ -65,6 +65,7 @@ class FlutterHomeActivity : FlutterActivity() {
                         )
                     }
                 }
+
                 else -> result.notImplemented()
             }
         }

@@ -9,8 +9,9 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     // Update this with your actual backend URL
-    private const val BASE_URL = "http://192.168.91.13:8080/api/"
-    //    "http://10.0.2.2:8080/api/"  // Android Emulator
+    private const val BASE_URL =
+//        "http://192.168.91.13:8080/api/"
+        "http://10.0.2.2:8080/api/"  // Android Emulator
 //     For physical device use: "http://192.168.91.13:8080/api/"
     // For production use: "https://your-domain.com/api/"
 

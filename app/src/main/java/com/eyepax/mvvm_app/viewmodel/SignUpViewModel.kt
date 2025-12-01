@@ -70,10 +70,12 @@ class SignUpViewModel : ViewModel() {
                             _signUpResult.value = Pair(false, response?.message ?: "Sign up failed")
                         }
                     }
+
                     is Resource.Error -> {
                         Log.e(TAG, "Sign up error: ${result.message}")
                         _signUpResult.value = Pair(false, result.message ?: "Sign up failed")
                     }
+
                     is Resource.Loading -> {
                         // Already showing loading
                     }

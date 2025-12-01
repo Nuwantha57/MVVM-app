@@ -70,17 +70,20 @@ class SignInViewModel : ViewModel() {
                                 _loginResult.value = Resource.Success(response)
                             } else {
                                 Log.e(TAG, "Failed to decode user info from ID token")
-                                _loginResult.value = Resource.Error("Failed to decode user information")
+                                _loginResult.value =
+                                    Resource.Error("Failed to decode user information")
                             }
                         } else {
                             Log.e(TAG, "Login failed: ${response?.message}")
                             _loginResult.value = Resource.Error(response?.message ?: "Login failed")
                         }
                     }
+
                     is Resource.Error -> {
                         Log.e(TAG, "Login error: ${result.message}")
                         _loginResult.value = Resource.Error(result.message ?: "Login failed")
                     }
+
                     is Resource.Loading -> {
                         // Already showing loading
                     }

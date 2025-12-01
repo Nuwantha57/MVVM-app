@@ -52,10 +52,12 @@ class SignInActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     tvStatus.text = result.data?.message ?: "Login successful"
                 }
+
                 is Resource.Error -> {
                     tvStatus.text = result.message
                     Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                 }
+
                 is Resource.Loading -> {
                     tvStatus.text = "Logging in..."
                 }

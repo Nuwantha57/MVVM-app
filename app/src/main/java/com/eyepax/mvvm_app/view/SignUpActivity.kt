@@ -64,7 +64,10 @@ class SignUpActivity : AppCompatActivity() {
                 val username = etUsername.text.toString().trim()
 
                 // Log for debugging
-                android.util.Log.d("SignUpActivity", "Sign up successful, navigating to verification for user: $username")
+                android.util.Log.d(
+                    "SignUpActivity",
+                    "Sign up successful, navigating to verification for user: $username"
+                )
 
                 // Navigate to verification screen after 1 second
                 android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
