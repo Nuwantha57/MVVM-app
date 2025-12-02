@@ -25,21 +25,49 @@ import com.eyepax.mvvm_app.viewmodel.SplashViewModel
 //    }
 //}
 
+// directly go home without authentication
 
 class SplashActivity : AppCompatActivity() {
-    private val splashViewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_splash)
 
-        splashViewModel.isFinished.observe(this) { finished ->
-            if (finished) {
-                startActivity(Intent(this, SignInActivity::class.java))
-                finish()
-            }
-        }
-        splashViewModel.startTimer()
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            // Go directly to Flutter Home with mock user data
+            val intent = FlutterHomeActivity.createIntent(
+                context = this,
+                userId = "user123",
+                name = "Test User",
+                email = "test@example.com",
+                accessToken = "mock_token",
+                idToken = null,
+                refreshToken = null
+            )
+            startActivity(intent)
+            finish()
+
+        }, 2000) // 2 seconds delay
     }
 }
+
+
+
+//class SplashActivity : AppCompatActivity() {
+//    private val splashViewModel: SplashViewModel by viewModels()
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        enableEdgeToEdge()
+//        setContentView(R.layout.activity_splash)
+//
+//        splashViewModel.isFinished.observe(this) { finished ->
+//            if (finished) {
+//                startActivity(Intent(this, SignInActivity::class.java))
+//                finish()
+//            }
+//        }
+//        splashViewModel.startTimer()
+//    }
+//}
