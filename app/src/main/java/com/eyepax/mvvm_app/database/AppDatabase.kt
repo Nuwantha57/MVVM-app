@@ -15,7 +15,7 @@ import com.eyepax.mvvm_app.model.WiFiNetwork
         BleDevice::class,      // ADD THIS
         WiFiNetwork::class     // ADD THIS
     ],
-    version = 2,  // INCREMENT VERSION
+    version = 3,  // INCREMENT VERSION
     exportSchema = false
 )
 @TypeConverters(Converters::class)

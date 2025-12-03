@@ -11,9 +11,9 @@ object RetrofitClient {
     // Update this with your actual backend URL
     private const val BASE_URL =
 //        "http://192.168.98.136:8080/api/"
-//        "http://10.0.2.2:8080/api/"  // Android Emulator
+        "http://10.0.2.2:8080/api/"  // Android Emulator
 //     For physical device use:
-    "http://192.168.98.136:8080/api/"
+//    "http://192.168.98.136:8080/api/"
     // For production use: "https://your-domain.com/api/"
 
     // Logging interceptor for debugging

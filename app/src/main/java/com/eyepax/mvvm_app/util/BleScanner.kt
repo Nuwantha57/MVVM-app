@@ -9,7 +9,6 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.eyepax.mvvm_app.model.BleDevice
@@ -25,7 +24,8 @@ class BleScanner(private val context: Context) {
     private var onDeviceFoundCallback: ((List<BleDevice>) -> Unit)? = null
 
     init {
-        val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothManager =
+            context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapter = bluetoothManager.adapter
         bleScanner = bluetoothAdapter?.bluetoothLeScanner
     }
@@ -33,32 +33,35 @@ class BleScanner(private val context: Context) {
     private val scanCallback = object : ScanCallback() {
         @SuppressLint("MissingPermission")
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
-            result?.let {
-                if (ActivityCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.BLUETOOTH_CONNECT
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    val device = BleDevice(
-                        address = it.device.address,
-                        name = it.device.name ?: "Unknown Device",
-                        rssi = it.rssi,
-                        lastSeen = System.currentTimeMillis(),
-                        isFavorite = false
-                    )
+            result ?: return
 
-                    // Update or add device
-                    val existingIndex = scannedDevices.indexOfFirst { d -> d.address == device.address }
-                    if (existingIndex != -1) {
-                        scannedDevices[existingIndex] = device
-                    } else {
-                        scannedDevices.add(device)
-                    }
-
-                    onDeviceFoundCallback?.invoke(scannedDevices.toList())
-                    Log.d(TAG, "Found device: ${device.name} (${device.address}) RSSI: ${device.rssi}")
-                }
+            // On Android 8.1 we only require location permission
+            if (!hasLocationPermission()) {
+                Log.e(TAG, "onScanResult: missing ACCESS_FINE_LOCATION")
+                return
             }
+
+            val device = BleDevice(
+                address = result.device.address,
+                name = result.device.name ?: "Unknown Device",
+                rssi = result.rssi,
+                lastSeen = System.currentTimeMillis(),
+                isFavorite = false
+            )
+
+            val existingIndex =
+                scannedDevices.indexOfFirst { d -> d.address == device.address }
+            if (existingIndex != -1) {
+                scannedDevices[existingIndex] = device
+            } else {
+                scannedDevices.add(device)
+            }
+
+            onDeviceFoundCallback?.invoke(scannedDevices.toList())
+            Log.d(
+                TAG,
+                "Found device: ${device.name} (${device.address}) RSSI: ${device.rssi}"
+            )
         }
 
         override fun onScanFailed(errorCode: Int) {
@@ -73,50 +76,41 @@ class BleScanner(private val context: Context) {
             return
         }
 
-        if (!hasPermissions()) {
-            Log.e(TAG, "Missing BLE permissions")
+        if (!hasLocationPermission()) {
+            Log.e(TAG, "Missing BLE permissions: ACCESS_FINE_LOCATION not granted")
+            return
+        }
+
+        if (bluetoothAdapter?.isEnabled != true) {
+            Log.e(TAG, "Bluetooth is disabled")
             return
         }
 
         scannedDevices.clear()
         onDeviceFoundCallback = onDeviceFound
 
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.BLUETOOTH_SCAN
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            bleScanner?.startScan(scanCallback)
-            isScanning = true
-            Log.d(TAG, "BLE scan started")
-        }
+        bleScanner?.startScan(scanCallback)
+        isScanning = true
+        Log.d(TAG, "BLE scan started (REAL)")
     }
 
     @SuppressLint("MissingPermission")
     fun stopScan() {
         if (!isScanning) return
 
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.BLUETOOTH_SCAN
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            bleScanner?.stopScan(scanCallback)
-            isScanning = false
-            Log.d(TAG, "BLE scan stopped")
-        }
+        bleScanner?.stopScan(scanCallback)
+        isScanning = false
+        Log.d(TAG, "BLE scan stopped")
     }
 
     fun isBluetoothEnabled(): Boolean {
         return bluetoothAdapter?.isEnabled == true
     }
 
-    private fun hasPermissions(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
-        } else {
-            ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        }
+    private fun hasLocationPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 }
