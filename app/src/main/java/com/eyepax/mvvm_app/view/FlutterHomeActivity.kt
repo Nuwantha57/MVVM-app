@@ -10,11 +10,12 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 import com.eyepax.mvvm_app.util.BleManager
 import com.eyepax.mvvm_app.util.WiFiManager
+import io.flutter.embedding.android.FlutterFragmentActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FlutterHomeActivity : FlutterActivity() {
+class FlutterHomeActivity : FlutterFragmentActivity() {
 
     private val METHOD_CHANNEL = "com.eyepax.mvvm_app/user_data"
     private val BLE_EVENT_CHANNEL = "com.eyepax.mvvm_app/ble_stream"
