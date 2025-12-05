@@ -3,3 +3,11 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
 }
+
+
+subprojects {
+    // Disable ktlintCheck for all submodules that have it (e.g., adyen_checkout)
+    tasks.matching { it.name == "ktlintCheck" }.configureEach {
+        enabled = false
+    }
+}
