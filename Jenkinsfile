@@ -3,7 +3,7 @@ pipeline {
         docker {
             // Use a Docker image with Flutter + Android SDK pre-installed
             // Example image (adjust to one that works or build your own):
-            image 'jenkins/jenkins:lts''
+            image 'jenkins/jenkins:lts'
             args '--user root'
         }
     }
