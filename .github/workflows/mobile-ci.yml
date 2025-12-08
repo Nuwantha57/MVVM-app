@@ -1,0 +1,67 @@
+name: Mobile CI
+
+on:
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main, development ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Checkout repo + submodules
+      - name: Checkout repo with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      # 2) Setup Java (for Gradle/Android build)
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # 3) Setup Android SDK (example using a helper action or manual script)
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          target: default
+          arch: x86_64
+          build-tools: 34.0.0
+
+      # 4) Setup Flutter (for the flutter_module)
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      # 5) Install Flutter module dependencies
+      - name: Flutter pub get
+        working-directory: flutter_module
+        run: flutter pub get
+
+      # 6) Configure flutter_module Android local.properties to point to Flutter SDK
+      - name: Configure Flutter SDK path for module
+        run: |
+          FLUTTER_SDK_DIR="$(flutter sdk-path)"
+          mkdir -p flutter_module/.android
+          cat <<EOF > flutter_module/.android/local.properties
+          sdk.dir=$ANDROID_HOME
+          flutter.sdk=$FLUTTER_SDK_DIR
+          EOF
+
+      # 7) Build the Android app that embeds the module
+      - name: Build Android debug APK
+        working-directory: mobile-app
+        run: ./gradlew assembleDebug --no-daemon
+
+      # 8) Upload APK as artifact
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-debug-apk
+          path: mobile-app/app/build/outputs/apk/debug/*.apk
