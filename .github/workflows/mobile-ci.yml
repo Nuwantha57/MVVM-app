@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Checkout repo
+      # 1) Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -24,12 +24,10 @@ jobs:
 
       # 3) Make gradlew executable
       - name: Make gradlew executable
-        working-directory: mobile-app
         run: chmod +x gradlew
 
       # 4) Build the Android app
       - name: Build Android debug APK
-        working-directory: mobile-app
         run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       # 5) Upload APK as artifact
@@ -37,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: android-debug-apk
-          path: mobile-app/app/build/outputs/apk/debug/*.apk
+          path: app/build/outputs/apk/debug/*.apk
