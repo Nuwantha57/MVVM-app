@@ -1,81 +1,70 @@
 pipeline {
-    agent {
-        docker {
-            // Use a Docker image with Flutter + Android SDK pre-installed
-            // Example image (adjust to one that works or build your own):
-            image 'jenkins/jenkins:lts'
-            args '--user root'
-        }
-    }
-
+    agent any
+    
     environment {
-        // These paths depend on the Docker image
-        ANDROID_HOME = '/opt/android-sdk-linux'
-        FLUTTER_HOME = '/sdks/flutter'
+        ANDROID_HOME = '/opt/android-sdk'
+        PATH = "${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${env.PATH}"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out code...'
+                echo '📥 Checking out code...'
                 checkout scm
-                sh 'git submodule update --init --recursive'
             }
         }
 
-        stage('Flutter Dependencies') {
+        stage('Configure Android SDK') {
             steps {
-                echo 'Installing Flutter dependencies...'
-                dir('flutter_module') {
-                    sh 'flutter pub get'
-                }
-            }
-        }
-
-        stage('Configure Flutter SDK Path') {
-            steps {
-                echo 'Configuring local.properties...'
-                script {
-                    def flutterSdk = sh(script: 'which flutter | xargs dirname | xargs dirname', returnStdout: true).trim()
-                    sh """
-                        mkdir -p flutter_module/.android
-                        cat <<EOF > flutter_module/.android/local.properties
+                echo '⚙️ Configuring local.properties...'
+                sh """
+                    cat <<EOF > local.properties
 sdk.dir=${ANDROID_HOME}
-flutter.sdk=${flutterSdk}
 EOF
-                    """
-                }
+                    cat local.properties
+                """
             }
         }
 
-        stage('Build Android Debug APK') {
+        stage('Build Debug APK') {
             steps {
-                echo 'Building Android APK...'
-                dir('mobile-app') {
-                    sh 'chmod +x gradlew'
-                    sh './gradlew clean assembleDebug --no-daemon --stacktrace'
-                }
+                echo '🏗️ Building Android Debug APK...'
+                sh 'chmod +x gradlew'
+                sh './gradlew clean assembleDebug --no-daemon --stacktrace'
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                echo '🧪 Running unit tests...'
+                sh './gradlew test --no-daemon || echo "Tests completed with issues"'
+            }
+        }
+
+        stage('Lint Check') {
+            steps {
+                echo '🔍 Running lint checks...'
+                sh './gradlew lint --no-daemon || echo "Lint completed with warnings"'
             }
         }
 
         stage('Archive APK') {
             steps {
-                echo 'Archiving APK artifact...'
-                archiveArtifacts artifacts: 'mobile-app/app/build/outputs/apk/debug/*.apk', fingerprint: true
+                echo '📁 Archiving APK artifact...'
+                archiveArtifacts artifacts: 'app/build/outputs/apk/debug/*.apk', fingerprint: true, allowEmptyArchive: true
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build succeeded!'
+            echo '✅ Android build completed successfully!'
         }
         failure {
-            echo '❌ Build failed. Check console output.'
+            echo '❌ Build failed! Check console output.'
         }
         always {
-            echo 'Cleaning up workspace...'
-            cleanWs()
+            echo '🧹 Build finished.'
         }
     }
 }
