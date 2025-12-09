@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "774356431656",
+    "project_id": "mvvm-app-f1ee7",
+    "storage_bucket": "mvvm-app-f1ee7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774356431656:android:a5dc871fdda7318c9d961d",
+        "android_client_info": {
+          "package_name": "com.eyepax.mvvm_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQRaeowT3mqpHb3EwRQr150QE_FpAWFyk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
