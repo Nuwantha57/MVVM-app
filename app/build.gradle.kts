@@ -2,15 +2,13 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
-//    id("com.android.application")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")  // ✅ Added this
 }
 
 android {
     namespace = "com.eyepax.mvvm_app"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.eyepax.mvvm_app"
@@ -51,10 +49,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+//    implementation("com.google.firebase:firebase-crashlytics-ktx")
+//    implementation("com.google.firebase:firebase-messaging-ktx")
 
     // Retrofit & Gson
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -89,10 +87,8 @@ dependencies {
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
-    // CardView (for list items)
+    // CardView
     implementation("androidx.cardview:cardview:1.0.0")
 
     implementation(project(":flutter"))
 }
-
-
