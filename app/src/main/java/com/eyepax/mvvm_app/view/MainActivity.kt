@@ -1,5 +1,6 @@
 package com.eyepax.mvvm_app.view
 
+import android.content.Intent
 import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -54,6 +55,10 @@ class MainActivity : AppCompatActivity() {
         // Setup buttons
         setupCrashlyticsTestButton()
         setupFCMButton()
+
+        findViewById<Button>(R.id.btnTestSSL)?.setOnClickListener {
+            startActivity(Intent(this, SSLPinningTestActivity::class.java))
+        }
     }
 
     private fun requestNotificationPermission() {
