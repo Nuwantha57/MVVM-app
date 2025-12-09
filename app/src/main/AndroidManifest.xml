@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.eyepax.mvvm_app">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <!-- Internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -61,6 +63,15 @@
             android:exported="false"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize" />
+
+        <!-- FCM Service -->
+        <service
+            android:name=".service.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
     </application>
 

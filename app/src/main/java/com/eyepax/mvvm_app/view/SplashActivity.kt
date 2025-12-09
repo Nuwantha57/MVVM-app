@@ -27,31 +27,45 @@ import com.eyepax.mvvm_app.viewmodel.SplashViewModel
 
 // directly go home without authentication
 
+//class SplashActivity : AppCompatActivity() {
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_splash)
+//
+//        Handler(Looper.getMainLooper()).postDelayed({
+//
+//            // Go directly to Flutter Home with mock user data
+//            val intent = FlutterHomeActivity.createIntent(
+//                context = this,
+//                userId = "user123",
+//                name = "Test User",
+//                email = "test@example.com",
+//                accessToken = "mock_token",
+//                idToken = null,
+//                refreshToken = null
+//            )
+//            startActivity(intent)
+//            finish()
+//
+//        }, 2000) // 2 seconds delay
+//    }
+//}
 class SplashActivity : AppCompatActivity() {
+
+    private val splashTimeOut: Long = 3000 // 3 seconds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        // Navigate to MainActivity after delay
         Handler(Looper.getMainLooper()).postDelayed({
-
-            // Go directly to Flutter Home with mock user data
-            val intent = FlutterHomeActivity.createIntent(
-                context = this,
-                userId = "user123",
-                name = "Test User",
-                email = "test@example.com",
-                accessToken = "mock_token",
-                idToken = null,
-                refreshToken = null
-            )
-            startActivity(intent)
-            finish()
-
-        }, 2000) // 2 seconds delay
+            startActivity(Intent(this, MainActivity::class.java))
+            finish() // Close splash screen
+        }, splashTimeOut)
     }
 }
-
 
 
 //class SplashActivity : AppCompatActivity() {
