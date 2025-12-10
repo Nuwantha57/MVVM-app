@@ -15,46 +15,34 @@ This is an Android application with a splash screen that transitions to a main a
 
 - **Language**: Kotlin 2.0.21
 - **Build System**: Gradle 8.13 with Kotlin DSL (.kts files)
-- **Android Gradle Plugin (AGP)**: 8.13.1 (⚠️ See Critical Build Issue below)
+- **Android Gradle Plugin (AGP)**: 8.3.0
 - **Java Version**: JDK 17 (Temurin distribution)
-- **Compile SDK**: 36 (⚠️ See Critical Build Issue below)
+- **Compile SDK**: 35
 - **Min SDK**: 24 (Android 7.0)
-- **Target SDK**: 36
+- **Target SDK**: 35
 - **Dependencies**: AndroidX Core KTX, AppCompat, Material Design, ConstraintLayout
 - **Testing**: JUnit 4.13.2, AndroidX Test (JUnit 1.3.0, Espresso 3.7.0)
 
-## Critical Build Issues & Required Fixes
+## Build Configuration (Fixed in This PR)
 
-⚠️ **IMPORTANT**: The repository has configuration errors that prevent builds from succeeding:
+⚠️ **HISTORICAL NOTE**: The repository originally had configuration errors that prevented builds. These have been fixed:
 
-### Issue 1: Invalid AGP Version
-- **Problem**: `gradle/libs.versions.toml` specifies AGP version `8.13.1` which does not exist
-- **Fix**: Change to a valid version like `8.3.0` or `8.5.0`
+### Fixed Issue 1: Invalid AGP Version
+- **Original Problem**: `gradle/libs.versions.toml` specified AGP version `8.13.1` which does not exist
+- **✅ Fixed**: Changed to valid version `8.3.0`
 - **File**: `gradle/libs.versions.toml`, line 2
-- **Change**: `agp = "8.13.1"` → `agp = "8.3.0"`
 
-### Issue 2: Invalid compileSdk Syntax  
-- **Problem**: `app/build.gradle.kts` has incorrect syntax `compileSdk { version = release(36) }`
-- **Fix**: Use simple assignment `compileSdk = 35`
+### Fixed Issue 2: Invalid compileSdk Syntax  
+- **Original Problem**: `app/build.gradle.kts` had incorrect syntax `compileSdk { version = release(36) }`
+- **✅ Fixed**: Changed to simple assignment `compileSdk = 35`
 - **File**: `app/build.gradle.kts`, lines 8-10
-- **Change**: 
-  ```kotlin
-  // BEFORE (incorrect):
-  compileSdk {
-      version = release(36)
-  }
-  
-  // AFTER (correct):
-  compileSdk = 35
-  ```
 
-### Issue 3: SDK Version Mismatch
-- **Problem**: SDK 36 may not be available; SDK 35 is more stable
-- **Fix**: Update targetSdk to 35
+### Fixed Issue 3: SDK Version Mismatch
+- **Original Problem**: SDK 36 was specified but SDK 35 is more stable
+- **✅ Fixed**: Updated targetSdk to 35
 - **File**: `app/build.gradle.kts`, line 15
-- **Change**: `targetSdk = 36` → `targetSdk = 35`
 
-**These fixes must be applied before any build commands will succeed.**
+**These fixes have been applied. Builds should now succeed in environments with proper Android SDK setup.**
 
 ## Build & Development Commands
 
@@ -62,6 +50,7 @@ This is an Android application with a splash screen that transitions to a main a
 1. **ALWAYS** run `chmod +x gradlew` before first Gradle command if gradlew is not executable
 2. Ensure Java 17 is installed and JAVA_HOME is set
 3. Android SDK must be available (or build will fail in environments without it)
+4. Build configuration issues have been fixed in this repository
 
 ### Build Commands (in order)
 
@@ -110,11 +99,11 @@ This is an Android application with a splash screen that transitions to a main a
 
 ### Important Build Notes
 
-- **ALWAYS** apply the fixes above before attempting any build
+- Build configuration issues have been resolved (AGP version, compileSdk syntax)
 - First build downloads dependencies and takes significantly longer (2-5 minutes)
 - Subsequent builds are faster due to caching
-- If build fails with "Plugin not found", check AGP version in `gradle/libs.versions.toml`
-- If build fails with syntax errors, verify `compileSdk` syntax in `app/build.gradle.kts`
+- Use `--no-daemon` in CI environments to avoid daemon issues
+- Use `--stacktrace` for detailed error information when debugging
 
 ## Project Structure
 
@@ -199,7 +188,7 @@ app/
 4. Build debug APK (`./gradlew assembleDebug --no-daemon --stacktrace`)
 5. Upload APK as artifact
 
-**⚠️ CI will fail** until build configuration issues are fixed.
+**⚠️ GitHub Actions CI** runs on every push/PR to `main` or `development` branches and should now succeed with the fixed configuration.
 
 ### Jenkins Pipeline (`Jenkinsfile`)
 
@@ -312,13 +301,15 @@ Ignores:
 
 ## Troubleshooting
 
-### "Plugin not found" Error
+### "Plugin not found" Error (Historical)
 - **Cause**: Invalid AGP version in `gradle/libs.versions.toml`
-- **Fix**: Change `agp = "8.13.1"` to `agp = "8.3.0"`
+- **Status**: ✅ Fixed in this repository (now uses AGP 8.3.0)
+- **If you see this**: Verify `gradle/libs.versions.toml` has `agp = "8.3.0"`
 
-### "Could not find method compileSdk" Error  
+### "Could not find method compileSdk" Error (Historical)
 - **Cause**: Invalid syntax in `app/build.gradle.kts`
-- **Fix**: Change `compileSdk { version = release(36) }` to `compileSdk = 35`
+- **Status**: ✅ Fixed in this repository (now uses `compileSdk = 35`)
+- **If you see this**: Verify `app/build.gradle.kts` has correct syntax
 
 ### "Permission denied: ./gradlew" Error
 - **Fix**: Run `chmod +x gradlew` before Gradle commands
@@ -334,15 +325,14 @@ Ignores:
 
 ## Best Practices
 
-1. **ALWAYS apply configuration fixes before building**
-2. **ALWAYS** run `chmod +x gradlew` if permission denied
-3. **Use `--no-daemon`** in CI/CD to avoid daemon issues
-4. **Use `--stacktrace`** when debugging build failures
-5. **Run lint before committing**: `./gradlew lint`
-6. **Test on multiple SDK versions** if changing minSdk/targetSdk
-7. **Follow Kotlin coding conventions**: camelCase for class names
-8. **Keep versions synchronized** between `targetSdk` and `compileSdk`
-9. **Trust these instructions**: Only search/explore if information here is incomplete or incorrect
+1. **Run `chmod +x gradlew`** if permission denied
+2. **Use `--no-daemon`** in CI/CD to avoid daemon issues
+3. **Use `--stacktrace`** when debugging build failures
+4. **Run lint before committing**: `./gradlew lint`
+5. **Test on multiple SDK versions** if changing minSdk/targetSdk
+6. **Follow Kotlin coding conventions**: camelCase for class names
+7. **Keep versions synchronized** between `targetSdk` and `compileSdk`
+8. **Trust these instructions**: Only search/explore if information here is incomplete or incorrect
 
 ## Quick Reference
 
@@ -354,4 +344,4 @@ Ignores:
 | Run Lint | `./gradlew lint --no-daemon` | ~45-90s |
 | List Tasks | `./gradlew tasks` | ~5-10s |
 
-**Remember**: Configuration fixes must be applied before any command will succeed!
+**Remember**: Build configuration has been fixed. Builds should succeed in proper Android environments!
