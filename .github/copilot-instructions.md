@@ -332,7 +332,7 @@ Ignores:
 5. **Test on multiple SDK versions** if changing minSdk/targetSdk
 6. **Follow Kotlin coding conventions**: camelCase for class names
 7. **Keep versions synchronized** between `targetSdk` and `compileSdk`
-8. **Trust these instructions**: Only search/explore if information here is incomplete or incorrect
+8. **Use these instructions as your primary reference**: Start here for build commands, project structure, and common patterns. Only explore the codebase directly when working on specific features or when these instructions don't cover your particular need.
 
 ## Quick Reference
 
