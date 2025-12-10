@@ -116,7 +116,7 @@ This is an Android application with a splash screen that transitions to a main a
 ├── .idea/                          # Android Studio configuration
 ├── app/                            # Main application module
 ├── gradle/                         # Gradle wrapper files
-│   ├── libs.versions.toml         # ⚠️ Version catalog (contains AGP version error)
+│   ├── libs.versions.toml         # Version catalog (fixed: now uses AGP 8.3.0)
 │   └── wrapper/
 │       └── gradle-wrapper.properties  # Gradle 8.13 distribution
 ├── build.gradle.kts               # Root build configuration
@@ -131,7 +131,7 @@ This is an Android application with a splash screen that transitions to a main a
 ### App Module Structure  
 ```
 app/
-├── build.gradle.kts               # ⚠️ App-level build config (contains compileSdk error)
+├── build.gradle.kts               # App-level build config (fixed: compileSdk = 35)
 ├── proguard-rules.pro            # ProGuard configuration (default/empty)
 └── src/
     ├── main/
