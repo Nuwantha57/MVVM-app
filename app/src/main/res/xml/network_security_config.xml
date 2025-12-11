@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Debug configuration - allows user certificates for testing -->
+    <debug-overrides>
+        <trust-anchors>
+            <!-- Trust user-installed certificates (HTTP Toolkit) -->
+            <certificates src="user" />
+            <!-- Also trust system certificates -->
+            <certificates src="system" />
+        </trust-anchors>
+    </debug-overrides>
+
+    <!-- Base configuration for release builds -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <!-- Only trust system certificates in production -->
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
