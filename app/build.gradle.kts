@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")  // ✅ Added this
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -28,11 +28,22 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        // Add profile build type for Flutter
+        debug {
+
+        }
+
+        create("profile") {
+            initWith(getByName("debug"))
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -44,9 +55,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
@@ -71,11 +79,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
     // JWT Decoding
     implementation("com.auth0.android:jwtdecode:2.0.2")
 
@@ -90,5 +93,11 @@ dependencies {
     // CardView
     implementation("androidx.cardview:cardview:1.0.0")
 
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // Flutter Module (source integration - recommended for development)
     implementation(project(":flutter"))
 }
