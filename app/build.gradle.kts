@@ -90,5 +90,5 @@ dependencies {
     // CardView
     implementation("androidx.cardview:cardview:1.0.0")
 
-    implementation(project(":flutter"))
+//    implementation(project(":flutter"))
 }
