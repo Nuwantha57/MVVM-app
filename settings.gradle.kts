@@ -24,4 +24,4 @@ rootProject.name = "MVVM_app"
 include(":app")
 
 // Include Flutter module via Groovy file
-apply(from = "flutter_settings.gradle")
+//apply(from = "flutter_settings.gradle")
